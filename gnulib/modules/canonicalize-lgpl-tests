@@ -1,0 +1,15 @@
+Files:
+tests/test-canonicalize-lgpl.c
+tests/signature.h
+tests/macros.h
+
+Depends-on:
+ignore-value
+same-inode
+symlink
+
+configure.ac:
+
+Makefile.am:
+TESTS += test-canonicalize-lgpl
+check_PROGRAMS += test-canonicalize-lgpl

@@ -1,0 +1,38 @@
+@node stat
+@section @code{stat}
+@findex stat
+
+POSIX specification:@* @url{http://www.opengroup.org/onlinepubs/9699919799/functions/stat.html}
+
+Gnulib module: stat
+
+Portability problems fixed by Gnulib:
+@itemize
+@item
+On platforms where @code{off_t} is a 32-bit type, @code{stat} may not correctly
+report the size of files or block devices larger than 2 GB.
+(Cf. @code{AC_SYS_LARGEFILE}.)
+@item
+On some platforms, @code{stat("link-to-file/",buf)} succeeds instead
+of failing with @code{ENOTDIR}.
+FreeBSD 7.2, AIX 7.1, Solaris 9, mingw64.
+@item
+On some platforms, @code{stat(".",buf)} and @code{stat("./",buf)} give
+different results:
+mingw, MSVC 9.
+@end itemize
+
+Portability problems not fixed by Gnulib:
+@itemize
+@item
+@xref{sys/stat.h}, for general portability problems with @code{struct stat}.
+@item
+Cygwin's @code{stat} function sometimes sets @code{errno} to @code{EACCES} when
+@code{ENOENT} would be more appropriate.
+@item
+Because of the definition of @code{struct stat}, it is not possible to
+portably replace @code{stat} via an object-like macro.  Therefore,
+expressions such as @code{(islnk ? lstat : stat) (name, buf)} are not
+portable, and should instead be written @code{islnk ? lstat (name,
+buf) : stat (name, buf)}.
+@end itemize

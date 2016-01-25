@@ -1,0 +1,35 @@
+@node accept
+@section @code{accept}
+@findex accept
+
+POSIX specification:@* @url{http://www.opengroup.org/onlinepubs/9699919799/functions/accept.html}
+
+Gnulib module: accept
+
+Portability problems fixed by Gnulib:
+@itemize
+@item
+On Windows platforms (excluding Cygwin), the descriptors returned by
+the @code{accept} function cannot be used in calls to @code{read},
+@code{write}, and @code{close}; you have to use @code{recv}, @code{send},
+@code{closesocket} in these cases instead.
+@item
+On Windows platforms (excluding Cygwin), error codes for @code{accept}
+are not placed in @code{errno}, and @code{WSAGetLastError} must be
+used instead.
+@end itemize
+
+Portability problems not fixed by Gnulib:
+@itemize
+@item
+On BeOS, the descriptors returned by the @code{accept} function cannot be used
+in calls to @code{read}, @code{write}, and @code{close}; you have to use
+@code{recv}, @code{send}, @code{closesocket} in these cases instead.
+@item
+Some platforms don't have a @code{socklen_t} type; in this case this function's
+third argument type is @samp{int *}.
+@item
+On some platforms, this function's third argument type is @samp{void *},
+not @samp{socklen_t *}:
+Solaris 10.
+@end itemize

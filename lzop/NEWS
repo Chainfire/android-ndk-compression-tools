@@ -1,0 +1,63 @@
+==================================================================
+User visible changes for lzop -- a very fast file compressor
+==================================================================
+
+Changes in 1.03 (01 Nov 2010)
+  * Assorted minor updates.
+
+Changes in 1.02rc1 (25 Jul 2005)
+  * Made lzop compile with LZO v2.
+  * Under Windows files are now opened using the _O_SEQUENTIAL flag,
+    which results in a major speedup when (de)compressing large files.
+  * Under MacOS X, the configure script now will use the '-no-cpp-precomp'
+    compiler option in order to work around bugs in Apple's native
+    "smart" preprocessor.
+  * File sizes > 2GB are correctly displayed.
+
+Changes in 1.01 (27 Apr 2003)
+  * Five years have passed since the last release: completely updated
+    the Autoconf build system, enable Autoconf large file support.
+  * Warn about a compressed file's trailing zero bytes only if in
+    verbose mode (for compatibility with recent versions of GNU tar).
+  * Don't be to strict in favoring stdin - using '--no-stdin' should not
+    be necessary any longer in cron jobs.
+  * Added option '-P' to save/restore the path name of a compressed file.
+  * Added option '--crc32' to use a crc32 instead of a adler32 checksum.
+  * Fixed an assertion that could trigger in very rare cases.
+
+Changes in 1.00 (27 Apr 1998)
+  * Added command '--ls'
+  * Added options '--no-mode', '--no-time', '--no-warn' and '--ignore-warn'
+
+Changes in 0.96 (13 Mar 1998)
+  * Updated documentation
+  * Added option '--no-stdin'
+
+Changes in 0.95 (07 Dec 1997)
+  * Store a checksum by default (use option '-F' to disable)
+  * Added support for filters
+  * Adapted for LZO 1.02
+  * Minor fixes and changes
+
+Changes in 0.94 (15 Oct 1997)
+  * Added support for compressed archives (use with option '-o')
+
+Changes in 0.93 (10 Sep 1997)
+  * Use in-place decompression to reduce memory requirements
+  * Added support for environment variable 'LZOP'
+  * Compile fixes for Solaris
+
+Changes in 0.92 (07 Sep 1997): never released
+  * Fixed a bug in frames.c when passing an invalid pointer to free()
+
+Changes in 0.91 (01 Sep 1997)
+  * Added option '-S'
+  * Use GNU getopt for commandline parsing
+  * Use dynamic memory allocation
+
+Changes in 0.90 (10 Aug 1997)
+  * First public release of lzop - requires LZO library v1.01
+
+Sep 1996:
+  * For historical reasons: this is when I started writing lzop
+

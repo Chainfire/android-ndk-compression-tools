@@ -1,0 +1,34 @@
+@node sys/types.h
+@section @file{sys/types.h}
+
+POSIX specification:@* @url{http://www.opengroup.org/onlinepubs/9699919799/basedefs/sys_types.h.html}
+
+Gnulib module: sys_types
+
+Portability problems fixed by Gnulib:
+@itemize
+@item
+The type @code{pid_t} is not defined on some platforms:
+MSVC 9.
+@item
+The type @code{size_t} is not defined in this file on some platforms:
+MSVC 9.
+@item
+The type @code{ssize_t} is not defined on some platforms:
+MSVC 9.
+@item
+The type @code{mode_t} is not defined on some platforms:
+MSVC 9.
+@end itemize
+
+Portability problems not fixed by Gnulib:
+@itemize
+@item
+On some platforms the types @code{blksize_t} and @code{suseconds_t}
+are signed integer types that are wider than @code{long}:
+glibc x32
+@end itemize
+
+This module, together with the module @code{largefile}, also defines the type
+@code{off_t} to a 64-bit integer type on some platforms:
+mingw (except mingw64), MSVC 9.

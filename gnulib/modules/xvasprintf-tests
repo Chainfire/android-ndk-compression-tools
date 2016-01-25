@@ -1,0 +1,14 @@
+Files:
+tests/test-xvasprintf.c
+tests/macros.h
+
+Depends-on:
+progname
+
+configure.ac:
+
+Makefile.am:
+TESTS += test-xvasprintf
+check_PROGRAMS += test-xvasprintf
+test_xvasprintf_LDADD = $(LDADD) @LIBINTL@
+

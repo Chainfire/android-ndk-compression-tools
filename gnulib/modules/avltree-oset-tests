@@ -1,0 +1,13 @@
+Files:
+tests/test-avltree_oset.c
+tests/macros.h
+
+Depends-on:
+array-oset
+progname
+
+configure.ac:
+
+Makefile.am:
+TESTS += test-avltree_oset
+check_PROGRAMS += test-avltree_oset

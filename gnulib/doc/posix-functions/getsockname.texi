@@ -1,0 +1,22 @@
+@node getsockname
+@section @code{getsockname}
+@findex getsockname
+
+POSIX specification:@* @url{http://www.opengroup.org/onlinepubs/9699919799/functions/getsockname.html}
+
+Gnulib module: getsockname
+
+Portability problems fixed by Gnulib:
+@itemize
+@item
+On Windows platforms (excluding Cygwin), error codes for
+@code{getsockname} are not placed in @code{errno}, and
+@code{WSAGetLastError} must be used instead.
+@end itemize
+
+Portability problems not fixed by Gnulib:
+@itemize
+@item
+Some platforms don't have a @code{socklen_t} type; in this case this function's
+third argument type is @samp{int *}.
+@end itemize

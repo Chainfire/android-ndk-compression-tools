@@ -1,0 +1,13 @@
+Files:
+tests/test-lock.c
+
+Depends-on:
+thread
+yield
+
+configure.ac:
+
+Makefile.am:
+TESTS += test-lock
+check_PROGRAMS += test-lock
+test_lock_LDADD = $(LDADD) @LIBMULTITHREAD@ @YIELD_LIB@

@@ -1,0 +1,37 @@
+Description:
+Copying of files.
+
+Files:
+lib/copy-file.h
+lib/copy-file.c
+m4/copy-file.m4
+
+Depends-on:
+acl
+binary-io
+error
+fstat
+full-write
+gettext-h
+ignore-value
+open
+quote
+safe-read
+stdlib
+unistd
+xalloc
+
+configure.ac:
+gl_COPY_FILE
+
+Makefile.am:
+lib_SOURCES += copy-file.h copy-file.c
+
+Include:
+"copy-file.h"
+
+License:
+GPL
+
+Maintainer:
+all

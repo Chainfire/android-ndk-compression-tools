@@ -1,0 +1,34 @@
+Description:
+Determination of the filename of a backup file, according to user environment
+variables.
+
+Files:
+lib/backupfile.h
+lib/backupfile.c
+m4/backupfile.m4
+
+Depends-on:
+argmatch
+closedir
+d-ino
+dirent-safer
+dirname-lgpl
+memcmp
+opendir
+readdir
+stdbool
+
+configure.ac:
+gl_BACKUPFILE
+
+Makefile.am:
+lib_SOURCES += backupfile.c
+
+Include:
+"backupfile.h"
+
+License:
+GPL
+
+Maintainer:
+Paul Eggert, Jim Meyering

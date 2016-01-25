@@ -1,0 +1,646 @@
+\section{NAME\label{NAME}\index{NAME}}
+
+
+lzop - compress or expand files
+
+\section{ABSTRACT\label{ABSTRACT}\index{ABSTRACT}}
+
+
+\textbf{lzop} is a file compressor very similar to \textbf{gzip}.
+\textbf{lzop} favors speed over compression ratio.
+
+\section{SYNOPSIS\label{SYNOPSIS}\index{SYNOPSIS}}
+
+
+\textbf{lzop} [~\textit{command}~] [~\textit{options}~] [~\textit{filename}~...~~]
+
+
+
+\textbf{lzop} [\textbf{-dxlthIVL19}] [\textbf{-qvcfFnNPkU}]
+[\textbf{-o}~\textit{file}] [\textbf{-p}[\textit{path}]] [\textbf{-S}~\textit{suffix}]
+[\textit{filename}~...]
+
+\section{DESCRIPTION\label{DESCRIPTION}\index{DESCRIPTION}}
+
+
+\textbf{lzop} reduces the size of the named files. Whenever possible,
+each file is compressed into one with the extension
+\textbf{.lzo}, while keeping the same ownership modes, access and
+modification times. If no files are specified, or if a
+file name is "-", lzop tries to compress the standard
+input to the standard output. lzop will only attempt to
+compress regular files or symbolic links to regular files.
+In particular, it will ignore directories.
+
+
+
+If the compressed file name is too long for its file system,
+\textbf{lzop} truncates it.
+
+
+
+Compressed files can be restored to their original form
+using \textbf{lzop~-d}.
+\textbf{lzop~-d} takes a list of files on its command line and
+decompresses each file whose name ends with \textbf{.lzo} and which
+begins with the correct magic number to an uncompressed
+file without the original extension. \textbf{lzop~-d} also recognizes
+the special extension \textbf{.tzo} as shorthand for \textbf{.tar.lzo}.
+When compressing, lzop uses the \textbf{.tzo} extension if necessary
+instead of truncating a file with a \textbf{.tar} extension.
+
+
+
+\textbf{lzop} stores the original file name, mode and time stamp
+in the compressed file. These can be used when
+decompressing the file with the \textbf{-d} option. This is useful when
+the compressed file name was truncated or when the time
+stamp was not preserved after a file transfer.
+
+
+
+\textbf{lzop} preserves the ownership, mode and time stamp of files
+when compressing. When decompressing lzop restores the
+mode and time stamp if present in the compressed files.
+See the options \textbf{-n}, \textbf{-N}, \textbf{--no-mode} and \textbf{--no-time}
+for more information.
+
+
+
+\textbf{lzop} always keeps original files unchanged unless
+you use the option \textbf{-U}.
+
+
+
+\textbf{lzop} uses the \textit{LZO data compression library} for compression
+services. The amount of compression obtained depends on
+the size of the input and the distribution of common substrings.
+Typically, text such as source code or English
+is compressed into 40-50\% of the original size, and large files usually
+compress much better than small ones. Compression and decompression speed
+is generally much faster than that achieved by \textbf{gzip}, but
+compression ratio is worse.
+
+\subsection*{COMPRESSION LEVELS\label{COMPRESSION_LEVELS}\index{COMPRESSION LEVELS}}
+
+
+lzop offers the following compression levels of the
+LZO1X algorithm:
+
+\begin{description}
+
+\item[{-3}] \mbox{}
+
+the default level offers pretty fast compression.
+-2, -3, -4, -5 and -6 are currently all equivalent - this
+may change in a future release.
+
+
+\item[{-1, --fast}] \mbox{}
+
+can be even a little bit faster in some cases - but
+most times you won't notice the difference
+
+
+\item[{-7, -8, -9, --best}] \mbox{}
+
+these compression levels are mainly intended for generating
+pre-compressed data - especially \textbf{-9} can be somewhat slow
+
+\end{description}
+
+
+Decompression is \textit{very} fast for all compression levels,
+and decompression speed is not affected by the compression
+level.
+
+\section{MAIN COMMAND\label{MAIN_COMMAND}\index{MAIN COMMAND}}
+
+
+If no other command is given then lzop defaults to compression
+(using compression level -3).
+
+\begin{description}
+
+\item[{-\#, --fast, --best}] \mbox{}
+
+Regulate the speed of compression using the specified
+digit \textbf{\#}, where -1 or --fast indicates the
+fastest compression method (less compression) and
+-9 or --best indicates the slowest compression
+method (best compression). The default compression
+level is -3.
+
+
+\item[{-d, --decompress, --uncompress}] \mbox{}
+
+Decompress. Each file will be placed into
+same the directory as the compressed file.
+
+
+\item[{-x, --extract}] \mbox{}
+
+Extract compressed files to the current working
+directory. This is the same as '-dPp'.
+
+
+\item[{-t, --test}] \mbox{}
+
+Test. Check the compressed file integrity.
+
+
+\item[{-l, --list}] \mbox{}
+
+For each compressed file, list the following
+fields:
+
+\begin{verbatim}
+  method: compression method
+  compressed: size of the compressed file
+  uncompr.: size of the uncompressed file
+  ratio: compression ratio
+  uncompressed_name: name of the uncompressed file
+\end{verbatim}
+
+
+In combination with the --verbose option, the following
+fields are also displayed:
+
+\begin{verbatim}
+  date & time: time stamp for the uncompressed file
+\end{verbatim}
+
+
+With --name, the uncompressed name, date and time
+are those stored within the compress file if present.
+
+
+
+With --verbose, the size totals and compression
+ratio for all files is also displayed. With
+--quiet, the title and totals lines are not displayed.
+
+
+
+Note that lzop defines compression ratio
+as compressed\_size / uncompressed\_size.
+
+
+\item[{--ls, --ls=\textit{FLAGS}}] \mbox{}
+
+List each compressed file in a format similar to \textbf{ls~-ln}.
+
+
+
+The following flags are currently honoured:
+  F  Append a '*' for executable files.
+  G  Inhibit display of group information.
+  Q  Enclose file names in double quotes.
+
+
+\item[{--info}] \mbox{}
+
+For each compressed file, list the internal header fields.
+
+
+\item[{-I, --sysinfo}] \mbox{}
+
+Display information about the system and quit.
+
+
+\item[{-L, --license}] \mbox{}
+
+Display the lzop license and quit.
+
+
+\item[{-h, -H, --help}] \mbox{}
+
+Display a help screen and quit.
+
+
+\item[{-V}] \mbox{}
+
+Version. Display the version number and compilation
+options and quit.
+
+
+\item[{--version}] \mbox{}
+
+Version. Display the version number and quit.
+
+\end{description}
+\section{OPTIONS\label{OPTIONS}\index{OPTIONS}}
+\begin{description}
+
+\item[{-c, --stdout, --to-stdout}] \mbox{}
+
+Write output on standard output. If there are several
+input files, the output consists of a sequence
+of independently (de)compressed members. To obtain
+better compression, concatenate all input files
+before compressing them.
+
+
+\item[{-o \textit{FILE}, --output=\textit{FILE}}] \mbox{}
+
+Write output to the file \textit{FILE}. If there are several
+input files, the output consists of a sequence
+of independently (de)compressed members.
+
+
+\item[{-p, -p\textit{DIR}, --path=\textit{DIR}}] \mbox{}
+
+Write output files into the directory \textit{DIR} instead
+of the directory determined by the input file. If
+\textit{DIR} is omitted, then write to the current working
+directory.
+
+
+\item[{-f, --force}] \mbox{}
+
+Force lzop to
+
+\begin{verbatim}
+ - overwrite existing files
+ - (de-)compress from stdin even if it seems a terminal
+ - (de-)compress to stdout even if it seems a terminal
+ - allow option -c in combination with -U
+\end{verbatim}
+
+
+Using \textbf{-f} two or more times forces things like
+
+\begin{verbatim}
+ - compress files that already have a .lzo suffix
+ - try to decompress files that do not have a valid suffix
+ - try to handle compressed files with unknown header flags
+\end{verbatim}
+
+
+Use with care.
+
+
+\item[{-F, --no-checksum}] \mbox{}
+
+Do not store or verify a checksum of the uncompressed
+file when compressing or decompressing.
+This speeds up the operation of lzop a little bit (especially
+when decompressing), but as unnoticed data corruption can happen
+in case of damaged compressed files the usage of this option
+is not generally recommended.
+Also, a checksum is always stored when
+compressing with one of the slow compression levels (-7, -8 or -9),
+regardless of this option.
+
+
+\item[{-n, --no-name}] \mbox{}
+
+When decompressing, do not restore the original
+file name if present (remove only the lzop suffix
+from the compressed file name). This option is the
+default under UNIX.
+
+
+\item[{-N, --name}] \mbox{}
+
+When decompressing, restore the original file name
+if present. This option is useful on systems which
+have a limit on file name length. If the original name saved in
+the compressed file is not suitable for its file system, a
+new name is constructed from the original one to make it
+legal.
+This option is the default under DOS, Windows and OS/2.
+
+
+\item[{-P}] \mbox{}
+
+When decompressing, restore the original path and file name if present.
+When compressing, store the relative (and cleaned) path name.
+This option is mainly useful when using \textbf{archive mode} - see
+usage examples below.
+
+
+\item[{--no-mode}] \mbox{}
+
+When decompressing, do not restore the original
+mode (permissions) saved in the compressed file.
+
+
+\item[{--no-time}] \mbox{}
+
+When decompressing, do not restore the original
+time stamp saved in the compressed file.
+
+
+\item[{-S \textit{.suf}, --suffix=\textit{.suf}}] \mbox{}
+
+Use suffix \textit{.suf} instead of \textit{.lzo}. The suffix must
+not contain multiple dots and special characters like '+' or '*',
+and suffixes other than \textit{.lzo} should be avoided to avoid confusion
+when files are transferred to other systems.
+
+
+\item[{-k, --keep}] \mbox{}
+
+Do not delete input files. This is the default.
+
+
+\item[{-U, --unlink, --delete}] \mbox{}
+
+Delete input files after succesfull compression or
+decompression. Use this option to make lzop behave
+like \textbf{gzip} and \textbf{bzip2}.
+Note that explicitly giving \textbf{-k} overrides \textbf{-U}.
+
+
+\item[{--crc32}] \mbox{}
+
+Use a crc32 checksum instead of a adler32 checksum.
+
+
+\item[{--no-warn}] \mbox{}
+
+Suppress all warnings.
+
+
+\item[{--ignore-warn}] \mbox{}
+
+Suppress all warnings, and never exit with exit status 2.
+
+
+\item[{-q, --quiet, --silent}] \mbox{}
+
+Suppress all warnings and decrease the verbosity of some
+commands like \textbf{--list} or \textbf{--test}.
+
+
+\item[{-v, --verbose}] \mbox{}
+
+Verbose. Display the name for each file compressed
+or decompressed. Multiple \textbf{-v} can be used to increase
+the verbosity of some commands like \textbf{--list} or \textbf{--test}.
+
+
+\item[{--}] \mbox{}
+
+Specifies that this is the end of the options. Any file name
+after \textbf{--} will not be interpreted as an option even if
+it starts with a hyphen.
+
+\end{description}
+\section{OTHER OPTIONS\label{OTHER_OPTIONS}\index{OTHER OPTIONS}}
+\begin{description}
+
+\item[{--no-stdin}] \mbox{}
+
+Do not try to read standard input (but a file name "-" will
+still override this option).
+In old versions of \textbf{lzop}, this option was necessary when
+used in cron jobs (which do not have a controlling terminal).
+
+
+\item[{--filter=\textit{NUMBER}}] \mbox{}
+
+Rarely useful.
+Preprocess data with a special "multimedia" filter
+before compressing in order to improve compression ratio.
+\textit{NUMBER} must be a decimal number from 1 to 16, inclusive.
+Using a filter slows down both compression and decompression
+quite a bit, and the compression ratio usually doesn't improve
+much either...
+More effective filters may be added in the future, though.
+
+
+
+You can try --filter=1 with data like 8-bit sound samples,
+--filter=2 with 16-bit samples or depth-16 images, etc.
+
+
+
+Un-filtering during decompression is handled automatically.
+
+
+\item[{-C, --checksum}] \mbox{}
+
+Deprecated. Only for compatibility with very old versions
+as lzop now uses a checksum by default. This option will
+get removed in a future release.
+
+
+\item[{--no-color}] \mbox{}
+
+Do not use any color escape sequences.
+
+
+\item[{--mono}] \mbox{}
+
+Assume a mono ANSI terminal. This is the default under UNIX
+(if console support is compiled in).
+
+
+\item[{--color}] \mbox{}
+
+Assume a color ANSI terminal or try full-screen access. This
+is the default under DOS and in a Linux virtual console
+(if console support is compiled in).
+
+\end{description}
+\section{ADVANCED USAGE\label{ADVANCED_USAGE}\index{ADVANCED USAGE}}
+
+
+lzop allows you to deal with your files in many flexible
+ways. Here are some usage examples:
+
+\begin{description}
+
+\item[{\textbf{backup mode}}] \mbox{}\begin{verbatim}
+  tar --use-compress-program=lzop -cf archive.tar.lzo files..
+\end{verbatim}
+\begin{verbatim}
+  This is the recommended mode for creating backups.
+  Requires GNU tar or a compatible version which accepts the
+  '--use-compress-program=XXX' option.
+\end{verbatim}
+
+\item[{\textbf{single file mode:} individually}] \textbf{(de)compress each file}\begin{verbatim}
+ create
+   lzop a.c             -> create a.c.lzo
+   lzop a.c b.c         -> create a.c.lzo & b.c.lzo
+   lzop -U a.c b.c      -> create a.c.lzo & b.c.lzo and delete a.c & b.c
+   lzop *.c
+\end{verbatim}
+\begin{verbatim}
+ extract
+   lzop -d a.c.lzo      -> restore a.c
+   lzop -df a.c.lzo     -> restore a.c, overwrite if already exists
+   lzop -d *.lzo
+\end{verbatim}
+\begin{verbatim}
+ list
+   lzop -l a.c.lzo
+   lzop -l *.lzo
+   lzop -lv *.lzo       -> be verbose
+\end{verbatim}
+\begin{verbatim}
+ test
+   lzop -t a.c.lzo
+   lzop -tq *.lzo       -> be quiet
+\end{verbatim}
+
+\item[{\textbf{pipe mode:} (de)compress from stdin}] \textbf{to stdout}\begin{verbatim}
+ create
+   lzop < a.c > y.lzo
+   cat a.c | lzop > y.lzo
+   tar -cf - *.c | lzop > y.tar.lzo     -> create a compressed tar file
+\end{verbatim}
+\begin{verbatim}
+ extract
+   lzop -d < y.lzo > a.c
+   lzop -d < y.tar.lzo | tar -xvf -     -> extract a tar file
+\end{verbatim}
+\begin{verbatim}
+ list
+   lzop -l < y.lzo
+   cat y.lzo | lzop -l
+   lzop -d < y.tar.lzo | tar -tvf -     -> list a tar file
+\end{verbatim}
+\begin{verbatim}
+ test
+   lzop -t < y.lzo
+   cat y.lzo | lzop -t
+\end{verbatim}
+
+\item[{\textbf{stdout mode:} (de)compress to stdout}] \mbox{}\begin{verbatim}
+ create
+   lzop -c a.c > y.lzo
+\end{verbatim}
+\begin{verbatim}
+ extract
+   lzop -dc y.lzo > a.c
+   lzop -dc y.tar.lzo | tar -xvf -      -> extract a tar file
+\end{verbatim}
+\begin{verbatim}
+ list
+   lzop -dc y.tar.lzo | tar -tvf -      -> list a tar file
+\end{verbatim}
+
+\item[{\textbf{archive mode:} compress/extract}] \textbf{multiple files into a single archive file}\begin{verbatim}
+ create
+   lzop a.c b.c -o sources.lzo          -> create an archive
+   lzop -P src/*.c -o sources.lzo       -> create an archive, store path name
+   lzop -c *.c > sources.lzo            -> another way to create an archive
+   lzop -c *.h >> sources.lzo           -> add files to archive
+\end{verbatim}
+\begin{verbatim}
+ extract
+   lzop -dN sources.lzo
+   lzop -x ../src/sources.lzo           -> extract to current directory
+   lzop -x -p/tmp < ../src/sources.lzo  -> extract to /tmp directory
+\end{verbatim}
+\begin{verbatim}
+ list
+   lzop -lNv sources.lzo
+\end{verbatim}
+\begin{verbatim}
+ test
+   lzop -t sources.lzo
+   lzop -tvv sources.lzo                -> be very verbose
+\end{verbatim}
+\end{description}
+
+
+If you wish to create a single archive file with multiple
+members so that members can later be extracted independently,
+you should prefer a full-featured archiver such as
+tar. The latest version of GNU tar supports the
+\textbf{--use-compress-program=lzop} option to invoke lzop transparently.
+lzop is designed as a complement to tar, not as
+a replacement.
+
+\section{ENVIRONMENT\label{ENVIRONMENT}\index{ENVIRONMENT}}
+
+
+The environment variable \textbf{LZOP} can hold a set of default
+options for lzop. These options are interpreted first and
+can be overwritten by explicit command line parameters.
+For example:
+
+\begin{verbatim}
+    for sh/ksh/zsh:    LZOP="-1v --name"; export LZOP
+    for csh/tcsh:      setenv LZOP "-1v --name"
+    for DOS/Windows:   set LZOP=-1v --name
+\end{verbatim}
+
+
+On Vax/VMS, the name of the environment variable is
+LZOP\_OPT, to avoid a conflict with the symbol set for
+invocation of the program.
+
+
+
+Not all of the options are valid in the environment variable -
+lzop will tell you.
+
+\section{SEE ALSO\label{SEE_ALSO}\index{SEE ALSO}}
+
+
+\textbf{bzip2}(1), \textbf{gzip}(1), \textbf{tar}(1)
+
+
+
+Precompiled binaries for some platforms are available
+from the lzop home page.
+
+\begin{verbatim}
+    see http://www.oberhumer.com/opensource/lzop/
+\end{verbatim}
+
+
+lzop uses the LZO data compression library for compression
+services.
+
+\begin{verbatim}
+    see http://www.oberhumer.com/opensource/lzo/
+\end{verbatim}
+\section{DIAGNOSTICS\label{DIAGNOSTICS}\index{DIAGNOSTICS}}
+
+
+Exit status is normally 0; if an error occurs, exit status
+is 1. If a warning occurs, exit status is 2 (unless
+option \textbf{--ignore-warn} is in effect).
+
+
+
+\textbf{lzop's} diagnostics are intended to be self-explanatory.
+
+\section{BUGS\label{BUGS}\index{BUGS}}
+
+
+No bugs are known. Please report all problems immediately to the author.
+
+\section{AUTHOR\label{AUTHOR}\index{AUTHOR}}
+
+
+Markus Franz Xaver Johannes Oberhumer
+$<$markus@oberhumer.com$>$
+http://www.oberhumer.com/opensource/lzop/
+
+\section{COPYRIGHT\label{COPYRIGHT}\index{COPYRIGHT}}
+
+
+lzop and the LZO library are
+Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+2006, 2007, 2008, 2009, 2010 by Markus Franz Xaver Johannes Oberhumer.
+All Rights Reserved.
+
+
+
+lzop and the LZO library are distributed under the terms
+of the GNU General Public License (GPL).
+
+
+
+Legal info: If want to integrate lzop into your commercial (backup-)system
+please carefully read the GNU GPL FAQ at http://www.gnu.org/licenses/gpl-faq.html
+about possible implications.
+

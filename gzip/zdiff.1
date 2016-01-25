@@ -1,0 +1,48 @@
+.TH ZDIFF 1
+.SH NAME
+zcmp, zdiff \- compare compressed files
+.SH SYNOPSIS
+.B zcmp
+[ cmp_options ] file1
+[ file2 ]
+.br
+.B zdiff
+[ diff_options ] file1
+[ file2 ]
+.SH DESCRIPTION
+.I  Zcmp
+and
+.I zdiff
+are used to invoke the
+.I cmp
+or the
+.I diff
+program on files compressed via
+.IR gzip "."
+All options specified are passed directly to
+.I cmp
+or
+.IR diff "."
+If only
+.I file1
+is specified, it is compared to the uncompressed contents of
+.IR file1 ".gz."
+If two files are specified, their contents (uncompressed if necessary) are fed to
+.I cmp
+or
+.IR diff "."
+The input files are not modified.
+The exit status from
+.I cmp
+or
+.I diff
+is preserved.
+.SH "SEE ALSO"
+cmp(1), diff(1), zmore(1), zgrep(1), znew(1), zforce(1), gzip(1), gzexe(1)
+.SH BUGS
+Messages from the
+.I cmp
+or
+.I diff
+programs may refer to file names such as "\-" instead of to the file
+names specified.

@@ -1,0 +1,36 @@
+Description:
+compare file time stamps
+
+Files:
+lib/utimecmp.h
+lib/utimecmp.c
+m4/utimecmp.m4
+
+Depends-on:
+hash
+stat-time
+time
+utimens
+intprops
+lstat
+stdbool
+stdint
+verify
+
+configure.ac:
+gl_UTIMECMP
+
+Makefile.am:
+lib_SOURCES += utimecmp.c
+
+Include:
+"utimecmp.h"
+
+Link:
+$(LIB_CLOCK_GETTIME)
+
+License:
+GPL
+
+Maintainer:
+Paul Eggert, Jim Meyering

@@ -1,0 +1,13 @@
+Files:
+tests/test-regex.c
+tests/macros.h
+
+Depends-on:
+localcharset
+
+configure.ac:
+
+Makefile.am:
+TESTS += test-regex
+check_PROGRAMS += test-regex
+test_regex_LDADD = $(LDADD) @LIBINTL@ $(LIBTHREAD) $(LIB_PTHREAD)

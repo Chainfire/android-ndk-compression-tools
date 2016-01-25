@@ -1,0 +1,69 @@
+Description:
+glob() function: Search for files and directories with paths matching a
+pattern, with GNU extensions.
+
+Files:
+lib/glob.in.h
+lib/glob-libc.h
+lib/glob.c
+m4/glob.m4
+
+Depends-on:
+extensions
+largefile
+snippet/arg-nonnull
+snippet/c++defs
+snippet/warn-on-use
+alloca          [test -n "$GLOB_H"]
+closedir        [test -n "$GLOB_H"]
+d-type          [test -n "$GLOB_H"]
+dirfd           [test -n "$GLOB_H"]
+fnmatch         [test -n "$GLOB_H"]
+getlogin_r      [test -n "$GLOB_H"]
+memchr          [test -n "$GLOB_H"]
+mempcpy         [test -n "$GLOB_H"]
+opendir         [test -n "$GLOB_H"]
+readdir         [test -n "$GLOB_H"]
+stdbool         [test -n "$GLOB_H"]
+strdup          [test -n "$GLOB_H"]
+sys_stat        [test -n "$GLOB_H"]
+unistd          [test -n "$GLOB_H"]
+malloc-posix    [test -n "$GLOB_H"]
+
+configure.ac:
+gl_GLOB
+if test -n "$GLOB_H"; then
+  AC_LIBOBJ([glob])
+  gl_PREREQ_GLOB
+fi
+
+Makefile.am:
+BUILT_SOURCES += $(GLOB_H)
+
+# We need the following in order to create <glob.h> when the system
+# doesn't have one that works with the given compiler.
+if GL_GENERATE_GLOB_H
+glob.h: glob.in.h $(top_builddir)/config.status $(CXXDEFS_H) $(ARG_NONNULL_H) $(WARN_ON_USE_H)
+	$(AM_V_GEN)rm -f $@-t $@ && \
+	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+	  sed -e 's|@''HAVE_SYS_CDEFS_H''@|$(HAVE_SYS_CDEFS_H)|g' \
+	      -e '/definitions of _GL_FUNCDECL_RPL/r $(CXXDEFS_H)' \
+	      -e '/definition of _GL_ARG_NONNULL/r $(ARG_NONNULL_H)' \
+	      -e '/definition of _GL_WARN_ON_USE/r $(WARN_ON_USE_H)' \
+	      < $(srcdir)/glob.in.h; \
+	} > $@-t && \
+	mv -f $@-t $@
+else
+glob.h: $(top_builddir)/config.status
+	rm -f $@
+endif
+MOSTLYCLEANFILES += glob.h glob.h-t
+
+Include:
+<glob.h>
+
+License:
+LGPLv2+
+
+Maintainer:
+all, glibc

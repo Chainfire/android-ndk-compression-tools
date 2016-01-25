@@ -1,0 +1,20 @@
+@node dirent.h
+@section @file{dirent.h}
+
+POSIX specification:@* @url{http://www.opengroup.org/onlinepubs/9699919799/basedefs/dirent.h.html}
+
+Gnulib module: dirent
+
+Portability problems fixed by Gnulib:
+@itemize
+@item
+The type @code{ino_t} is missing on some platforms:
+glibc 2.8 and others.
+@end itemize
+
+Portability problems not fixed by Gnulib:
+@itemize
+@item
+This header file is missing on some platforms:
+MSVC 9.
+@end itemize

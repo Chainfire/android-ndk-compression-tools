@@ -1,0 +1,14 @@
+Files:
+tests/test-argmatch.c
+tests/macros.h
+
+Depends-on:
+progname
+
+configure.ac:
+
+Makefile.am:
+TESTS += test-argmatch
+check_PROGRAMS += test-argmatch
+test_argmatch_LDADD = $(LDADD) @LIBINTL@
+

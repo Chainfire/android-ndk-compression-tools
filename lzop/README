@@ -1,0 +1,56 @@
+==================================================================
+lzop -- a very fast file compressor
+==================================================================
+
+Author  : Markus Franz Xaver Johannes Oberhumer
+          <markus@oberhumer.com>
+          http://www.oberhumer.com/opensource/lzop/
+Version : 1.03
+Date    : 01-Nov-2010
+
+
+Introduction
+------------
+lzop is a file compressor similar to gzip. Its main advantages over gzip
+are much higher compression and decompression speed at the cost of
+some compression ratio.
+
+lzop was designed with the following goals in mind:
+  - speed (both compression and decompression)
+  - reasonable drop-in compatibility to gzip
+  - portability
+
+
+Short documentation
+-------------------
+For detailed usage information please take a look at doc/lzop.txt.
+
+See the file NEWS for a list of major changes in the current release.
+
+See the file INSTALL for compilation and installation instructions.
+
+
+General functionality and behaviour has been modelled very closely
+after gzip. The main differences between lzop and gzip are:
+
+- Files compressed by lzop will have the suffix '.lzo'
+
+- lzop does not delete the input file(s) by default.
+  You have to use the option '-U' if you want this behaviour.
+
+
+lzop uses the LZO data compression library for compression
+services. See http://www.oberhumer.com/opensource/lzo/ .
+
+
+Directory overview:
+-------------------
+acconfig      Autoconf configuration files (UNIX specific)
+B             various support files for DOS, Windows, OS/2, ...
+doc           documentation in various formats
+src           source code
+
+
+Have fun,
+Markus
+

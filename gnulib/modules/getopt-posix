@@ -1,0 +1,56 @@
+Description:
+getopt() function: process command line arguments.
+
+Files:
+lib/getopt.in.h
+lib/getopt.c
+lib/getopt1.c
+lib/getopt_int.h
+m4/getopt.m4
+
+Depends-on:
+unistd
+extensions
+include_next
+snippet/arg-nonnull
+gettext-h       [test $REPLACE_GETOPT = 1]
+
+configure.ac:
+gl_FUNC_GETOPT_POSIX
+if test $REPLACE_GETOPT = 1; then
+  AC_LIBOBJ([getopt])
+  AC_LIBOBJ([getopt1])
+  gl_PREREQ_GETOPT
+  dnl Arrange for unistd.h to include getopt.h.
+  GNULIB_${gl_include_guard_prefix}_UNISTD_H_GETOPT=1
+fi
+AC_SUBST([GNULIB_${gl_include_guard_prefix}_UNISTD_H_GETOPT])
+
+Makefile.am:
+BUILT_SOURCES += $(GETOPT_H)
+
+# We need the following in order to create <getopt.h> when the system
+# doesn't have one that works with the given compiler.
+getopt.h: getopt.in.h $(top_builddir)/config.status $(ARG_NONNULL_H)
+	$(AM_V_GEN)rm -f $@-t $@ && \
+	{ echo '/* DO NOT EDIT! GENERATED AUTOMATICALLY! */'; \
+	  sed -e 's|@''GUARD_PREFIX''@|${gl_include_guard_prefix}|g' \
+	      -e 's|@''HAVE_GETOPT_H''@|$(HAVE_GETOPT_H)|g' \
+	      -e 's|@''INCLUDE_NEXT''@|$(INCLUDE_NEXT)|g' \
+	      -e 's|@''PRAGMA_SYSTEM_HEADER''@|@PRAGMA_SYSTEM_HEADER@|g' \
+	      -e 's|@''PRAGMA_COLUMNS''@|@PRAGMA_COLUMNS@|g' \
+	      -e 's|@''NEXT_GETOPT_H''@|$(NEXT_GETOPT_H)|g' \
+	      -e '/definition of _GL_ARG_NONNULL/r $(ARG_NONNULL_H)' \
+	      < $(srcdir)/getopt.in.h; \
+	} > $@-t && \
+	mv -f $@-t $@
+MOSTLYCLEANFILES += getopt.h getopt.h-t
+
+Include:
+<unistd.h>
+
+License:
+LGPLv2+
+
+Maintainer:
+all, glibc

@@ -1,0 +1,22 @@
+@node strftime
+@section @code{strftime}
+@findex strftime
+
+POSIX specification:@* @url{http://www.opengroup.org/onlinepubs/9699919799/functions/strftime.html}
+
+Gnulib module: ---
+
+Portability problems fixed by Gnulib:
+@itemize
+@end itemize
+
+Portability problems not fixed by Gnulib:
+@itemize
+@item
+The Windows C runtime library (which is used by MinGW) does not
+support the %e specifier (and possibly the other more recent SUS
+specifiers too, i.e., %C, %D, %h, %n, %r, %R, %t, and %T).
+@end itemize
+
+Extension: Gnulib offers a module @samp{strftime} that provides an
+@code{nstrftime} function with various GNU extensions.

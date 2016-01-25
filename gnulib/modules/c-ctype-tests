@@ -1,0 +1,12 @@
+Files:
+tests/test-c-ctype.c
+tests/macros.h
+
+Depends-on:
+ctype
+
+configure.ac:
+
+Makefile.am:
+TESTS += test-c-ctype
+check_PROGRAMS += test-c-ctype

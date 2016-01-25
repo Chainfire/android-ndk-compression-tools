@@ -1,0 +1,20 @@
+Description:
+compare inodes
+
+Files:
+lib/same-inode.h
+
+Depends-on:
+
+configure.ac:
+
+Makefile.am:
+
+Include:
+"same-inode.h"
+
+License:
+LGPLv2+
+
+Maintainer:
+Jim Meyering

@@ -1,0 +1,13 @@
+Files:
+tests/test-linkedhash_list.c
+tests/macros.h
+
+Depends-on:
+array-list
+progname
+
+configure.ac:
+
+Makefile.am:
+TESTS += test-linkedhash_list
+check_PROGRAMS += test-linkedhash_list

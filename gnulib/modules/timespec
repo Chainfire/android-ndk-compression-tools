@@ -1,0 +1,26 @@
+Description:
+timespec-related declarations
+
+Files:
+lib/timespec.h
+lib/timespec.c
+m4/timespec.m4
+
+Depends-on:
+extern-inline
+time
+
+configure.ac:
+gl_TIMESPEC
+
+Makefile.am:
+lib_SOURCES += timespec.c
+
+Include:
+"timespec.h"
+
+License:
+GPL
+
+Maintainer:
+Paul Eggert and Jim Meyering

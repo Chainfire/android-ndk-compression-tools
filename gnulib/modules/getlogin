@@ -1,0 +1,27 @@
+Description:
+getlogin() function: Get user name.
+
+Files:
+lib/getlogin.c
+m4/getlogin.m4
+
+Depends-on:
+unistd
+
+configure.ac:
+gl_FUNC_GETLOGIN
+if test $HAVE_GETLOGIN = 0; then
+  AC_LIBOBJ([getlogin])
+fi
+gl_UNISTD_MODULE_INDICATOR([getlogin])
+
+Makefile.am:
+
+Include:
+<unistd.h>
+
+License:
+LGPLv2+
+
+Maintainer:
+all

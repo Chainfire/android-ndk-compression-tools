@@ -1,0 +1,26 @@
+@node recvfrom
+@section @code{recvfrom}
+@findex recvfrom
+
+POSIX specification:@* @url{http://www.opengroup.org/onlinepubs/9699919799/functions/recvfrom.html}
+
+Gnulib module: recvfrom
+
+Portability problems fixed by Gnulib:
+@itemize
+@item
+This function has the return type @code{int} instead of @code{ssize_t}
+on some platforms:
+OSF/1 5.1.
+@item
+On Windows platforms (excluding Cygwin), error codes for
+@code{recvfrom} are not placed in @code{errno}, and
+@code{WSAGetLastError} must be used instead.
+@end itemize
+
+Portability problems not fixed by Gnulib:
+@itemize
+@item
+Some platforms don't have a @code{socklen_t} type; in this case this function's
+sixth argument type is @samp{int *}.
+@end itemize

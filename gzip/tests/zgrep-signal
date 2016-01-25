@@ -1,0 +1,56 @@
+#!/bin/sh
+# Check that zgrep is terminated gracefully by signal when
+# its grep/sed pipeline is terminated by a signal.
+
+# Copyright (C) 2010-2013 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# limit so don't run it by default.
+
+. "${srcdir=.}/init.sh"; path_prepend_ ..
+
+echo a | gzip -c > f.gz || framework_failure_
+
+test "x$PERL" = x && PERL=perl
+("$PERL" -e 'use warnings') >/dev/null 2>&1 || skip_ "no suitable perl found"
+
+exec_with_SIGPIPE_SIG_DFL () {
+  program=${1?}
+  shift
+  args=
+  for arg; do
+    args="$args, '$arg'"
+  done
+  "$PERL" -e "\$SIG{PIPE} = 'DEFAULT'; exec '$program'$args"
+}
+
+write_to_dangling_pipe () {
+  exec 3>&1
+  (
+    exec_with_SIGPIPE_SIG_DFL "$@"
+    echo $? >&3
+  ) | : || framework_failure_
+}
+
+signal_status=$(write_to_dangling_pipe cat f.gz f.gz)
+test 128 -lt $signal_status ||
+  framework_failure_ 'signal handling busted on this host'
+
+fail=0
+
+st=$(write_to_dangling_pipe zgrep a f.gz f.gz)
+
+test $st = $signal_status || fail=1
+
+Exit $fail

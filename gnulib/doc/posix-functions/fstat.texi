@@ -1,0 +1,28 @@
+@node fstat
+@section @code{fstat}
+@findex fstat
+
+POSIX specification:@* @url{http://www.opengroup.org/onlinepubs/9699919799/functions/fstat.html}
+
+Gnulib module: fstat
+
+Portability problems fixed by Gnulib:
+@itemize
+@item
+This function crashes when invoked with invalid arguments on some platforms:
+MSVC 9.
+@item
+On platforms where @code{off_t} is a 32-bit type, @code{fstat} may not correctly
+report the size of files or block devices larger than 2 GB.
+(Cf. @code{AC_SYS_LARGEFILE}.)
+@end itemize
+
+Portability problems not fixed by Gnulib:
+@itemize
+@item
+@xref{sys/stat.h}, for general portability problems with @code{struct stat}.
+@item
+On Cygwin, @code{fstat} applied to the file descriptors 0 and 1, returns
+different @code{st_ino} values, even if standard input and standard output
+are not redirected and refer to the same terminal.
+@end itemize

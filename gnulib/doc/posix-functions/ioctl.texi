@@ -1,0 +1,24 @@
+@node ioctl
+@section @code{ioctl}
+@findex ioctl
+
+POSIX specification:@* @url{http://www.opengroup.org/onlinepubs/9699919799/functions/ioctl.html}
+
+Gnulib module: ioctl
+
+Portability problems fixed by Gnulib:
+@itemize
+@item
+On Windows platforms (excluding Cygwin), @code{ioctl} is called
+@code{ioctlsocket}, and error codes for this function are not placed in
+@code{errno}, and @code{WSAGetLastError} must be used instead.
+@item
+On glibc platforms, the second parameter is of type @code{unsigned long}
+rather than @code{int}.
+@end itemize
+
+Portability problems not fixed by Gnulib:
+@itemize
+@item
+Most @code{ioctl} requests are platform and hardware specific.
+@end itemize
