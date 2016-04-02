@@ -345,34 +345,36 @@ rm -rf out
 
 # ---
 
-#build_gzip
+build_gzip
 build_pigz
 
-#build_bzip2
+build_bzip2
 
-#build_xz
+build_xz
 
-#build_lz4
+build_lz4
 
-#build_lzo
-#build_lzop
+build_lzo
+build_lzop
 
 # ---
 
-#confirm_output libgzip.a
-#confirm_output gzip
+confirm_output libgzip.a
+confirm_output gzip
 
-#confirm_output libbz2.a
-#confirm_output bzip2
+confirm_output pigz
 
-#confirm_output liblzma.a
-#confirm_output liblzma.so
-#confirm_output xz
+confirm_output libbz2.a
+confirm_output bzip2
 
-#confirm_output liblz4.a
-#confirm_output liblz4.so
-#confirm_output lz4
+confirm_output liblzma.a
+confirm_output liblzma.so
+confirm_output xz
 
-#confirm_output liblzo2.a
-#confirm_output liblzo2.so
-#confirm_output lzop
+confirm_output liblz4.a
+confirm_output liblz4.so
+confirm_output lz4
+
+confirm_output liblzo2.a
+confirm_output liblzo2.so
+confirm_output lzop

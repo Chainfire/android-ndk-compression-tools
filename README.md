@@ -3,6 +3,7 @@
 This is a collection of compression tools, and a script to download/build them, using the Android NDK.
 
 - gzip 1.6 - GPLv3
+- pigz (omni git) - BSD-ish
 - bzip2 1.0.6 - BSD-ish
 - xz utils (git) - public domain core / (L)GPLv2/v3 portions
 - lz4 (git) - BSD 2-clause core / GPLv2  portions
