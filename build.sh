@@ -62,6 +62,19 @@ build_core() {
     _CONFIGURE=$CONFIGURE
   fi
 
+  local _MAKE=all
+  if [ ! -z "$MAKE" ]; then
+    _MAKE=$MAKE
+  fi
+  if [ "$_MAKE" = "false" ]; then
+    _MAKE=
+  fi
+
+  local LIBTOOL=false
+  if [ -f "libtool" ]; then
+    LIBTOOL=true
+  fi
+
   local COMPILER=$(find $NDK/. | grep -e "$1-gcc$" | sort --reverse | grep -m 1 "linux-x86_64")
   local COMPILER_FIXED=$(readlink -f $COMPILER)
   local COMPILER_PATH=$(dirname $COMPILER_FIXED)
@@ -84,9 +97,8 @@ build_core() {
     COMPILER_FLAGS="$COMPILER_FLAGS -fPIC"
   fi
 
-  local LIBTOOL=false
-  if [ -f "libtool" ]; then
-    LIBTOOL=true
+  if (! $_CONFIGURE); then
+    LINKER_FLAGS="$LINKER_FLAGS --sysroot=$2"
   fi
 
   echo ------------------------------------------------------------------
@@ -115,15 +127,15 @@ build_core() {
 
   if ($_CONFIGURE); then
     if ($_STATIC && $LIBTOOL); then
-      PATH=$COMPILER_PATH:$PATH make -C "$3" -j4 all LDFLAGS="-all-static $LINKER_FLAGS"
+      PATH=$COMPILER_PATH:$PATH make -C "$3" -j4 $_MAKE LDFLAGS="-all-static $LINKER_FLAGS"
     else
-      PATH=$COMPILER_PATH:$PATH make -C "$3" -j4 all LDFLAGS="$LINKER_FLAGS"
+      PATH=$COMPILER_PATH:$PATH make -C "$3" -j4 $_MAKE LDFLAGS="$LINKER_FLAGS"
     fi
   else
     if ($_STATIC); then
-      PATH=$COMPILER_PATH:$PATH make -C "$3" -j4 all LDFLAGS="-static $LINKER_FLAGS" CFLAGS="$COMPILER_FLAGS" CPPFLAGS="$COMPILER_FLAGS" CXXFLAGS="$COMPILER_FLAGS"
+      PATH=$COMPILER_PATH:$PATH make -C "$3" -j4 $_MAKE LDFLAGS="-static $LINKER_FLAGS" CFLAGS="$COMPILER_FLAGS" CPPFLAGS="$COMPILER_FLAGS" CXXFLAGS="$COMPILER_FLAGS" CC="$CC" AR="$AR" RANLIB="$RANLIB"
     else
-      PATH=$COMPILER_PATH:$PATH make -C "$3" -j4 all LDFLAGS="$LINKER_FLAGS" CFLAGS="$COMPILER_FLAGS" CPPFLAGS="$COMPILER_FLAGS" CXXFLAGS="$COMPILER_FLAGS"
+      PATH=$COMPILER_PATH:$PATH make -C "$3" -j4 $_MAKE LDFLAGS="$LINKER_FLAGS" CFLAGS="$COMPILER_FLAGS" CPPFLAGS="$COMPILER_FLAGS" CXXFLAGS="$COMPILER_FLAGS" CC="$CC" AR="$AR" RANLIB="$RANLIB"
     fi
   fi
 
@@ -144,18 +156,21 @@ build_arch() {
   if [ "$2" -lt "21" ]; then
     PLATFORM=21
   fi
-  STATIC=true PIE=false EXTRA_CONFIG="$6" EXTRA_CFLAGS="$7 $STATIC_CFLAGS" EXTRA_LDFLAGS="$8 $STATIC_LDFLAGS" build_core $1 $NDK/platforms/android-$PLATFORM/arch-$3 "$5" "$9" "../out/static/$4"
+  local SYSROOT=$NDK/platforms/android-$PLATFORM/arch-$3
+  STATIC=true PIE=false EXTRA_CONFIG="$6" EXTRA_CFLAGS="$7 $STATIC_CFLAGS" EXTRA_LDFLAGS="$8 $STATIC_LDFLAGS" build_core $1 $SYSROOT "$5" "$9" "../out/static/$4"
 
   if (! echo $1 | grep 64 >/dev/null); then
     # 64 bit is always PIE, so only generate non-PIE on 32 bit
-    STATIC=false PIE=false EXTRA_CONFIG="$6" EXTRA_CFLAGS="$7 $DYNAMIC_CFLAGS" EXTRA_LDFLAGS="$8 $DYNAMIC_LDFLAGS" build_core $1 $NDK/platforms/android-$2/arch-$3 "$5" "$9" "../out/dynamic/$4"
+    local SYSROOT=$NDK/platforms/android-$2/arch-$3
+    STATIC=false PIE=false EXTRA_CONFIG="$6" EXTRA_CFLAGS="$7 $DYNAMIC_CFLAGS" EXTRA_LDFLAGS="$8 $DYNAMIC_LDFLAGS" build_core $1 $SYSROOT "$5" "$9" "../out/dynamic/$4"
   fi
 
   local PLATFORM=$2
   if [ "$2" -lt "17" ]; then
     PLATFORM=17;
   fi
-  STATIC=false PIE=true EXTRA_CONFIG="$6" EXTRA_CFLAGS="$7 $DYNAMIC_PIE_CFLAGS" EXTRA_LDFLAGS="$8 $DYNAMIC_PIE_LDFLAGS" build_core $1 $NDK/platforms/android-$PLATFORM/arch-$3 "$5" "$9" "../out/dynamic.pie/$4"
+  local SYSROOT=$NDK/platforms/android-$PLATFORM/arch-$3
+  STATIC=false PIE=true EXTRA_CONFIG="$6" EXTRA_CFLAGS="$7 $DYNAMIC_PIE_CFLAGS" EXTRA_LDFLAGS="$8 $DYNAMIC_PIE_LDFLAGS" build_core $1 $SYSROOT "$5" "$9" "../out/dynamic.pie/$4"
 
   unset STATIC
   unset PIE
@@ -222,6 +237,21 @@ build_gzip() {
   build_arch i686-linux-android 9 x86 $PATH_X86 . "" "-DPENDING_OUTPUT_N_BYTES=0 -D__sferror -DGNULIB_defined_struct_option" "" build_gzip_cp
   build_arch x86_64-linux-android 21 x86_64 $PATH_X64 . "" "-DPENDING_OUTPUT_N_BYTES=0 -D__sferror -DGNULIB_defined_struct_option" "" build_gzip_cp
 
+  cd ..
+}
+
+# build_pigz_cp outpath static pie
+build_pigz_cp() {
+  mkdir -p $1
+  cp pigz $1/pigz
+}
+
+# build_pigz
+build_pigz() {
+  cd pigz
+  local CONFIGURE=false 
+  local MAKE=false
+  build_archs . "" "" "" build_pigz_cp
   cd ..
 }
 
@@ -315,33 +345,34 @@ rm -rf out
 
 # ---
 
-build_gzip
+#build_gzip
+build_pigz
 
-build_bzip2
+#build_bzip2
 
-build_xz
+#build_xz
 
-build_lz4
+#build_lz4
 
-build_lzo
-build_lzop
+#build_lzo
+#build_lzop
 
 # ---
 
-confirm_output libgzip.a
-confirm_output gzip
+#confirm_output libgzip.a
+#confirm_output gzip
 
-confirm_output libbz2.a
-confirm_output bzip2
+#confirm_output libbz2.a
+#confirm_output bzip2
 
-confirm_output liblzma.a
-confirm_output liblzma.so
-confirm_output xz
+#confirm_output liblzma.a
+#confirm_output liblzma.so
+#confirm_output xz
 
-confirm_output liblz4.a
-confirm_output liblz4.so
-confirm_output lz4
+#confirm_output liblz4.a
+#confirm_output liblz4.so
+#confirm_output lz4
 
-confirm_output liblzo2.a
-confirm_output liblzo2.so
-confirm_output lzop
+#confirm_output liblzo2.a
+#confirm_output liblzo2.so
+#confirm_output lzop

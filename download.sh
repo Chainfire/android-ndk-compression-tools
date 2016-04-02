@@ -1,6 +1,7 @@
 # gzip
 
 if [ -d "gzip" ]; then rm -rf gzip; fi
+
 wget http://ftp.gnu.org/gnu/gzip/gzip-1.6.tar.gz
 tar xvf gzip-1.6.tar.gz
 mv gzip-1.6 gzip
@@ -39,6 +40,25 @@ if [ -d "gnulib" ]; then
   fi
 fi
 
+# pigz, use Android-ified sources from OmniROM
+
+if [ -d "pigz" ]; then rm -rf pigz; fi
+git init pigz
+cd pigz
+git remote add origin https://github.com/omnirom/android_bootable_recovery
+git config core.sparsecheckout true
+echo "pigz/*" >> .git/info/sparse-checkout
+git pull --depth=1 origin android-6.0
+rm -rf .git
+mv pigz/* .
+rmdir pigz
+cd ..
+
+# patch Makefile
+
+sed -i -e 's/$(CC) -o pigz pigz.o yarn.o -lpthread -lz/$(CC) $(CFLAGS) $(LDFLAGS) -o pigz pigz.o yarn.o -lz/' pigz/Makefile
+sed -i -e '/ln /d' pigz/Makefile
+
 # bzip2
 
 if [ -d "bzip2" ]; then rm -rf bzip2; fi
@@ -46,14 +66,6 @@ wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
 tar xvf bzip2-1.0.6.tar.gz
 mv bzip2-1.0.6 bzip2
 rm bzip2-1.0.6.tar.gz
-
-# crosscompile variables are hardcoded in the bzip2 makefile, breaking the builds
-
-if [ -f "bzip2/Makefile" ]; then
-  sed -i '/CC=/d' bzip2/Makefile
-  sed -i '/AR=/d' bzip2/Makefile
-  sed -i '/RANLIB=/d' bzip2/Makefile
-fi
 
 # xz
 
